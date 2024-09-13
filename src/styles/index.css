@@ -75,6 +75,10 @@ body {
   overflow: hidden;
 }
 
+.auth-card {
+  max-width: 440px;
+}
+
 .seller-nav .nav-link.active {
   background-color: var(--bz-navy);
 }
