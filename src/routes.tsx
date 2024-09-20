@@ -5,6 +5,7 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
 import { CategoryPage } from './pages/buyer/CategoryPage';
 import { HomePage } from './pages/buyer/HomePage';
+import { ProductPage } from './pages/buyer/ProductPage';
 import { SearchPage } from './pages/buyer/SearchPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
@@ -15,6 +16,7 @@ export const routes: RouteObject[] = [
       { index: true, element: <HomePage /> },
       { path: 'c/:slug', element: <CategoryPage /> },
       { path: 'search', element: <SearchPage /> },
+      { path: 'p/:id/:slug?', element: <ProductPage /> },
       { path: 'products/:id', element: <ProductPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignupPage /> },
