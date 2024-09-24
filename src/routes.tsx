@@ -7,6 +7,7 @@ import { CategoryPage } from './pages/buyer/CategoryPage';
 import { HomePage } from './pages/buyer/HomePage';
 import { ProductPage } from './pages/buyer/ProductPage';
 import { SearchPage } from './pages/buyer/SearchPage';
+import { StorefrontPage } from './pages/buyer/StorefrontPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export const routes: RouteObject[] = [
@@ -18,6 +19,7 @@ export const routes: RouteObject[] = [
       { path: 'search', element: <SearchPage /> },
       { path: 'p/:id/:slug?', element: <ProductPage /> },
       { path: 'products/:id', element: <ProductPage /> },
+      { path: 's/:slug', element: <StorefrontPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignupPage /> },
       { path: '*', element: <NotFoundPage /> },
