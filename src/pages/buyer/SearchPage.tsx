@@ -136,6 +136,13 @@ export function SearchPage() {
             <Form.Check type="radio" name="minRating" id="rating-any" label="Any" checked={filters.minRating == null} onChange={() => update({ minRating: undefined })} />
           </Form.Group>
 
+          <Form.Check
+            type="switch"
+            id="in-stock"
+            label="In stock only"
+            checked={filters.inStock === 'true'}
+            onChange={(e) => update({ inStock: e.target.checked ? 'true' : undefined })}
+          />
         </aside>
       </Col>
 
