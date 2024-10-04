@@ -6,7 +6,7 @@ import { CategoryMenu } from './CategoryMenu';
 import { Icon } from './Icon';
 
 export function Header() {
-  const { user, logout } = useApp();
+  const { user, cart, logout } = useApp();
   const navigate = useNavigate();
   const [q, setQ] = useState('');
 
@@ -55,6 +55,11 @@ export function Header() {
             </Nav.Link>
             <Nav.Link as={NavLink} to="/cart" aria-label="Cart" data-testid="cart-link">
               <Icon name="cart" />
+              {cart && cart.itemCount > 0 && (
+                <Badge bg="warning" text="dark" pill className="ms-1" data-testid="cart-count">
+                  {cart.itemCount}
+                </Badge>
+              )}
               <span className="d-lg-none ms-2">Cart</span>
             </Nav.Link>
             {user ? (

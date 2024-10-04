@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { api, AUTH_LOST_EVENT, unwrap } from '../api/client';
-import type { CategoryNode, Me } from '../api/types';
+import type { Cart, CategoryNode, Me } from '../api/types';
 import { clearTokens, getTokens, setTokens } from '../lib/auth-storage';
 
 export interface Toast {
@@ -13,11 +13,16 @@ export interface AppContextValue {
   ready: boolean;
   user: Me | null;
   categories: CategoryNode[];
+  cart: Cart | null;
   toasts: Toast[];
   login: (email: string, password: string) => Promise<Me>;
   signup: (name: string, email: string, password: string) => Promise<Me>;
   logout: () => Promise<void>;
   reloadUser: () => Promise<void>;
+  refreshCart: () => Promise<void>;
+  addToCart: (productId: number, quantity?: number) => Promise<void>;
+  setCartQuantity: (productId: number, quantity: number) => Promise<void>;
+  removeFromCart: (productId: number) => Promise<void>;
   notify: (message: string, variant?: Toast['variant']) => void;
   dismissToast: (id: number) => void;
 }
@@ -30,7 +35,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [user, setUser] = useState<Me | null>(null);
   const [categories, setCategories] = useState<CategoryNode[]>([]);
+  const [cart, setCart] = useState<Cart | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
+
+  async function loadCart() {
+    try {
+      setCart(await unwrap(api.GET('/cart')));
+    } catch {
+      setCart(null);
+    }
+  }
 
   async function loadSession(): Promise<Me | null> {
     if (!getTokens()) return null;
@@ -47,10 +61,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   async function afterSignIn(me: Me) {
     setUser(me);
+    await loadCart();
   }
 
   function resetSession() {
     setUser(null);
+    setCart(null);
   }
 
   useEffect(() => {
@@ -61,6 +77,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setCategories(data.categories);
       } catch {
         setCategories([]);
+      }
+      if (me) {
+        await loadCart();
       }
       setReady(true);
     })();
@@ -80,6 +99,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     ready,
     user,
     categories,
+    cart,
     toasts,
     async login(email, password) {
       const res = await unwrap(api.POST('/auth/login', { body: { email, password } }));
@@ -107,6 +127,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     async reloadUser() {
       await loadSession();
+    },
+    refreshCart: loadCart,
+    async addToCart(productId, quantity = 1) {
+      const existing = cart?.items.find((i) => i.productId === productId)?.quantity ?? 0;
+      await unwrap(api.PUT('/cart/items/{productId}', { params: { path: { productId } }, body: { quantity: existing + quantity } }));
+      await loadCart();
+    },
+    async setCartQuantity(productId, quantity) {
+      await unwrap(api.PUT('/cart/items/{productId}', { params: { path: { productId } }, body: { quantity } }));
+      await loadCart();
+    },
+    async removeFromCart(productId) {
+      await unwrap(api.DELETE('/cart/items/{productId}', { params: { path: { productId } } }));
+      await loadCart();
     },
     notify,
     dismissToast(id) {

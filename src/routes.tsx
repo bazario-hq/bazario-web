@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { RequireAuth } from './components/RequireAuth';
 import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
+import { CartPage } from './pages/buyer/CartPage';
 import { CategoryPage } from './pages/buyer/CategoryPage';
 import { HomePage } from './pages/buyer/HomePage';
 import { ProductPage } from './pages/buyer/ProductPage';
@@ -22,6 +23,7 @@ export const routes: RouteObject[] = [
       { path: 's/:slug', element: <StorefrontPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignupPage /> },
+      { path: 'cart', element: <RequireAuth><CartPage /></RequireAuth> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
