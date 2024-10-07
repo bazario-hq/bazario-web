@@ -14,6 +14,7 @@ export interface AppContextValue {
   user: Me | null;
   categories: CategoryNode[];
   cart: Cart | null;
+  wishlistIds: number[];
   toasts: Toast[];
   login: (email: string, password: string) => Promise<Me>;
   signup: (name: string, email: string, password: string) => Promise<Me>;
@@ -23,6 +24,7 @@ export interface AppContextValue {
   addToCart: (productId: number, quantity?: number) => Promise<void>;
   setCartQuantity: (productId: number, quantity: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
+  toggleWishlist: (productId: number) => Promise<void>;
   notify: (message: string, variant?: Toast['variant']) => void;
   dismissToast: (id: number) => void;
 }
@@ -36,6 +38,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Me | null>(null);
   const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [cart, setCart] = useState<Cart | null>(null);
+  const [wishlistIds, setWishlistIds] = useState<number[]>([]);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   async function loadCart() {
@@ -43,6 +46,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setCart(await unwrap(api.GET('/cart')));
     } catch {
       setCart(null);
+    }
+  }
+
+  async function loadWishlist() {
+    try {
+      const data = await unwrap(api.GET('/wishlist'));
+      setWishlistIds(data.items.map((i) => i.product.id));
+    } catch {
+      setWishlistIds([]);
     }
   }
 
@@ -62,11 +74,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   async function afterSignIn(me: Me) {
     setUser(me);
     await loadCart();
+    await loadWishlist();
   }
 
   function resetSession() {
     setUser(null);
     setCart(null);
+    setWishlistIds([]);
   }
 
   useEffect(() => {
@@ -80,6 +94,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
       if (me) {
         await loadCart();
+        await loadWishlist();
       }
       setReady(true);
     })();
@@ -100,6 +115,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     user,
     categories,
     cart,
+    wishlistIds,
     toasts,
     async login(email, password) {
       const res = await unwrap(api.POST('/auth/login', { body: { email, password } }));
@@ -141,6 +157,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     async removeFromCart(productId) {
       await unwrap(api.DELETE('/cart/items/{productId}', { params: { path: { productId } } }));
       await loadCart();
+    },
+    async toggleWishlist(productId) {
+      if (wishlistIds.includes(productId)) {
+        await unwrap(api.DELETE('/wishlist/{productId}', { params: { path: { productId } } }));
+      } else {
+        await unwrap(api.PUT('/wishlist/{productId}', { params: { path: { productId } } }));
+      }
+      await loadWishlist();
     },
     notify,
     dismissToast(id) {

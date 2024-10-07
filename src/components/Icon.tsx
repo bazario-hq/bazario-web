@@ -5,6 +5,7 @@ import type { IconBaseProps } from 'react-icons';
 const ICONS = {
   cart: 'FaShoppingCart',
   heart: 'FaHeart',
+  heartOutline: 'FaRegHeart',
   user: 'FaUserCircle',
   search: 'FaSearch',
   star: 'FaStar',

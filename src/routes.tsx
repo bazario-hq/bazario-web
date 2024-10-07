@@ -9,6 +9,7 @@ import { HomePage } from './pages/buyer/HomePage';
 import { ProductPage } from './pages/buyer/ProductPage';
 import { SearchPage } from './pages/buyer/SearchPage';
 import { StorefrontPage } from './pages/buyer/StorefrontPage';
+import { WishlistPage } from './pages/buyer/WishlistPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export const routes: RouteObject[] = [
@@ -23,6 +24,7 @@ export const routes: RouteObject[] = [
       { path: 's/:slug', element: <StorefrontPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignupPage /> },
+      { path: 'wishlist', element: <RequireAuth><WishlistPage /></RequireAuth> },
       { path: 'cart', element: <RequireAuth><CartPage /></RequireAuth> },
       { path: '*', element: <NotFoundPage /> },
     ],
