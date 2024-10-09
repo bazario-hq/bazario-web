@@ -27,6 +27,31 @@ const product: ProductCardData = {
   publishedAt: null,
 };
 
+describe('Price', () => {
+  it('shows a sale price with the original struck through', () => {
+    render(<Price cents={4200} compareAt={5200} />);
+    expect(screen.getByText('$42.00')).toHaveClass('text-danger');
+    expect(screen.getByText('$52.00').tagName).toBe('S');
+  });
+
+  it('ignores a compare-at price that is not higher', () => {
+    render(<Price cents={4200} compareAt={4200} />);
+    expect(screen.queryByText('$42.00', { selector: 's' })).toBeNull();
+  });
+});
+
+describe('Rating', () => {
+  it('labels the star value', () => {
+    render(<Stars value={3.5} />);
+    expect(screen.getByLabelText('3.5 out of 5 stars')).toBeInTheDocument();
+  });
+
+  it('says when there are no reviews', () => {
+    render(<Rating avg={0} count={0} />);
+    expect(screen.getByText('No reviews yet')).toBeInTheDocument();
+  });
+});
+
 describe('MemoryRouter sanity', () => {
   it('renders', () => {
     render(<MemoryRouter><span>ok</span></MemoryRouter>);
