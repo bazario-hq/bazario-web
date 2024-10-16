@@ -5,6 +5,7 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
 import { CartPage } from './pages/buyer/CartPage';
 import { CategoryPage } from './pages/buyer/CategoryPage';
+import { CheckoutPage } from './pages/buyer/CheckoutPage';
 import { HomePage } from './pages/buyer/HomePage';
 import { ProductPage } from './pages/buyer/ProductPage';
 import { SearchPage } from './pages/buyer/SearchPage';
@@ -26,6 +27,7 @@ export const routes: RouteObject[] = [
       { path: 'signup', element: <SignupPage /> },
       { path: 'wishlist', element: <RequireAuth><WishlistPage /></RequireAuth> },
       { path: 'cart', element: <RequireAuth><CartPage /></RequireAuth> },
+      { path: 'checkout', element: <RequireAuth><CheckoutPage /></RequireAuth> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

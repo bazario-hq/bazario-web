@@ -1,0 +1,17 @@
+export const COUNTRIES: [string, string][] = [
+  ['LK', 'Sri Lanka'],
+  ['IN', 'India'],
+  ['SG', 'Singapore'],
+  ['MY', 'Malaysia'],
+  ['AE', 'United Arab Emirates'],
+  ['AU', 'Australia'],
+  ['NZ', 'New Zealand'],
+  ['GB', 'United Kingdom'],
+  ['IE', 'Ireland'],
+  ['DE', 'Germany'],
+  ['FR', 'France'],
+  ['NL', 'Netherlands'],
+  ['US', 'United States'],
+  ['CA', 'Canada'],
+  ['JP', 'Japan'],
+];
