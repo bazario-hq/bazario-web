@@ -7,6 +7,8 @@ import { CartPage } from './pages/buyer/CartPage';
 import { CategoryPage } from './pages/buyer/CategoryPage';
 import { CheckoutPage } from './pages/buyer/CheckoutPage';
 import { HomePage } from './pages/buyer/HomePage';
+import { OrderDetailPage } from './pages/buyer/OrderDetailPage';
+import { OrdersPage } from './pages/buyer/OrdersPage';
 import { ProductPage } from './pages/buyer/ProductPage';
 import { SearchPage } from './pages/buyer/SearchPage';
 import { StorefrontPage } from './pages/buyer/StorefrontPage';
@@ -28,6 +30,8 @@ export const routes: RouteObject[] = [
       { path: 'wishlist', element: <RequireAuth><WishlistPage /></RequireAuth> },
       { path: 'cart', element: <RequireAuth><CartPage /></RequireAuth> },
       { path: 'checkout', element: <RequireAuth><CheckoutPage /></RequireAuth> },
+      { path: 'orders', element: <RequireAuth><OrdersPage /></RequireAuth> },
+      { path: 'orders/:id', element: <RequireAuth><OrderDetailPage /></RequireAuth> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
