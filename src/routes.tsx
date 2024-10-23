@@ -14,6 +14,9 @@ import { SearchPage } from './pages/buyer/SearchPage';
 import { StorefrontPage } from './pages/buyer/StorefrontPage';
 import { WishlistPage } from './pages/buyer/WishlistPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { ProductEditPage } from './pages/seller/ProductEditPage';
+import { ProductsPage } from './pages/seller/ProductsPage';
+import { SellerLayout } from './pages/seller/SellerLayout';
 
 export const routes: RouteObject[] = [
   {
@@ -32,6 +35,15 @@ export const routes: RouteObject[] = [
       { path: 'checkout', element: <RequireAuth><CheckoutPage /></RequireAuth> },
       { path: 'orders', element: <RequireAuth><OrdersPage /></RequireAuth> },
       { path: 'orders/:id', element: <RequireAuth><OrderDetailPage /></RequireAuth> },
+      {
+        path: 'seller',
+        element: <RequireAuth role="seller"><SellerLayout /></RequireAuth>,
+        children: [
+          { path: 'products', element: <ProductsPage /> },
+          { path: 'products/new', element: <ProductEditPage /> },
+          { path: 'products/:id', element: <ProductEditPage /> },
+        ],
+      },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
