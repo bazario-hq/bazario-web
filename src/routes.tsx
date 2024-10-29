@@ -17,6 +17,8 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { ProductEditPage } from './pages/seller/ProductEditPage';
 import { ProductsPage } from './pages/seller/ProductsPage';
 import { SellerLayout } from './pages/seller/SellerLayout';
+import { SellerOrderDetailPage } from './pages/seller/SellerOrderDetailPage';
+import { SellerOrdersPage } from './pages/seller/SellerOrdersPage';
 
 export const routes: RouteObject[] = [
   {
@@ -42,6 +44,8 @@ export const routes: RouteObject[] = [
           { path: 'products', element: <ProductsPage /> },
           { path: 'products/new', element: <ProductEditPage /> },
           { path: 'products/:id', element: <ProductEditPage /> },
+          { path: 'orders', element: <SellerOrdersPage /> },
+          { path: 'orders/:orderId', element: <SellerOrderDetailPage /> },
         ],
       },
       { path: '*', element: <NotFoundPage /> },

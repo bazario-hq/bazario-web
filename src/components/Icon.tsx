@@ -11,6 +11,7 @@ const ICONS = {
   star: 'FaStar',
   store: 'FaStore',
   box: 'FaBox',
+  truck: 'FaTruck',
   check: 'FaCheck',
   times: 'FaTimes',
   trash: 'FaTrash',
