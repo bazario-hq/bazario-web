@@ -11,6 +11,7 @@ import { OrderDetailPage } from './pages/buyer/OrderDetailPage';
 import { OrdersPage } from './pages/buyer/OrdersPage';
 import { ProductPage } from './pages/buyer/ProductPage';
 import { SearchPage } from './pages/buyer/SearchPage';
+import { SellApplyPage } from './pages/buyer/SellApplyPage';
 import { StorefrontPage } from './pages/buyer/StorefrontPage';
 import { WishlistPage } from './pages/buyer/WishlistPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -32,6 +33,7 @@ export const routes: RouteObject[] = [
       { path: 's/:slug', element: <StorefrontPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignupPage /> },
+      { path: 'sell', element: <SellApplyPage /> },
       { path: 'wishlist', element: <RequireAuth><WishlistPage /></RequireAuth> },
       { path: 'cart', element: <RequireAuth><CartPage /></RequireAuth> },
       { path: 'checkout', element: <RequireAuth><CheckoutPage /></RequireAuth> },
