@@ -37,6 +37,16 @@ function toForm(p?: SellerProduct): FormState {
   };
 }
 
+async function uploadImage(productId: number, file: File, altText: string) {
+  const form = new FormData();
+  form.append('image', file);
+  if (altText) form.append('altText', altText);
+  const res = await authFetch(new Request(`${API_BASE}/seller/products/${productId}/images`, { method: 'POST', body: form }));
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new ApiError(res.status, body.error?.code ?? 'error', body.error?.message ?? 'Upload failed');
+  return body as SellerProduct;
+}
+
 export function ProductEditPage() {
   const { id } = useParams();
   const isNew = !id || id === 'new';
@@ -49,6 +59,9 @@ export function ProductEditPage() {
   const [loadError, setLoadError] = useState<unknown>(null);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [altText, setAltText] = useState('');
+  const [uploading, setUploading] = useState(false);
   useDocumentTitle(isNew ? 'New product' : product?.name);
 
   useEffect(() => {
@@ -99,6 +112,31 @@ export function ProductEditPage() {
       setError(errorMessage(err));
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function onUpload() {
+    if (!file || !productId) return;
+    setUploading(true);
+    try {
+      setProduct(await uploadImage(productId, file, altText));
+      setFile(null);
+      setAltText('');
+      notify('Image uploaded');
+    } catch (err) {
+      notify(errorMessage(err), 'danger');
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function removeImage(imageId: number) {
+    if (!productId) return;
+    try {
+      await unwrap(api.DELETE('/seller/products/{id}/images/{imageId}', { params: { path: { id: productId, imageId } } }));
+      setProduct((p) => (p ? { ...p, images: p.images.filter((i) => i.id !== imageId) } : p));
+    } catch (err) {
+      notify(errorMessage(err), 'danger');
     }
   }
 

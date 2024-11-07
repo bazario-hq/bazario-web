@@ -19,6 +19,8 @@ const ICONS = {
   minus: 'FaMinus',
   edit: 'FaEdit',
   signOut: 'FaSignOutAlt',
+  image: 'FaImage',
+  upload: 'FaUpload',
 } as const;
 
 export type IconName = keyof typeof ICONS;
