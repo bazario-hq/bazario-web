@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { RequireAuth } from './components/RequireAuth';
 import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
+import { AccountPage } from './pages/buyer/AccountPage';
 import { CartPage } from './pages/buyer/CartPage';
 import { CategoryPage } from './pages/buyer/CategoryPage';
 import { CheckoutPage } from './pages/buyer/CheckoutPage';
@@ -39,6 +40,7 @@ export const routes: RouteObject[] = [
       { path: 'checkout', element: <RequireAuth><CheckoutPage /></RequireAuth> },
       { path: 'orders', element: <RequireAuth><OrdersPage /></RequireAuth> },
       { path: 'orders/:id', element: <RequireAuth><OrderDetailPage /></RequireAuth> },
+      { path: 'account', element: <RequireAuth><AccountPage /></RequireAuth> },
       {
         path: 'seller',
         element: <RequireAuth role="seller"><SellerLayout /></RequireAuth>,
