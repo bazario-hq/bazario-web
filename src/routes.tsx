@@ -8,6 +8,7 @@ import { CartPage } from './pages/buyer/CartPage';
 import { CategoryPage } from './pages/buyer/CategoryPage';
 import { CheckoutPage } from './pages/buyer/CheckoutPage';
 import { HomePage } from './pages/buyer/HomePage';
+import { NotificationsPage } from './pages/buyer/NotificationsPage';
 import { OrderDetailPage } from './pages/buyer/OrderDetailPage';
 import { OrdersPage } from './pages/buyer/OrdersPage';
 import { ProductPage } from './pages/buyer/ProductPage';
@@ -40,6 +41,7 @@ export const routes: RouteObject[] = [
       { path: 'checkout', element: <RequireAuth><CheckoutPage /></RequireAuth> },
       { path: 'orders', element: <RequireAuth><OrdersPage /></RequireAuth> },
       { path: 'orders/:id', element: <RequireAuth><OrderDetailPage /></RequireAuth> },
+      { path: 'notifications', element: <RequireAuth><NotificationsPage /></RequireAuth> },
       { path: 'account', element: <RequireAuth><AccountPage /></RequireAuth> },
       {
         path: 'seller',

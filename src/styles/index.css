@@ -103,6 +103,10 @@ body {
   max-width: 440px;
 }
 
+.notification-unread {
+  background: #f3f7ff;
+}
+
 .seller-nav .nav-link.active {
   background-color: var(--bz-navy);
 }

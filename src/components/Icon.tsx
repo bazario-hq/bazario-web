@@ -6,6 +6,7 @@ const ICONS = {
   cart: 'FaShoppingCart',
   heart: 'FaHeart',
   heartOutline: 'FaRegHeart',
+  bell: 'FaBell',
   user: 'FaUserCircle',
   search: 'FaSearch',
   star: 'FaStar',

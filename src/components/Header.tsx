@@ -2,11 +2,12 @@ import { useState, type FormEvent } from 'react';
 import { Badge, Button, Container, Form, InputGroup, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { formatDateTime } from '../lib/format';
 import { CategoryMenu } from './CategoryMenu';
 import { Icon } from './Icon';
 
 export function Header() {
-  const { user, cart, logout } = useApp();
+  const { user, cart, unread, logout } = useApp();
   const navigate = useNavigate();
   const [q, setQ] = useState('');
 
@@ -62,6 +63,20 @@ export function Header() {
               )}
               <span className="d-lg-none ms-2">Cart</span>
             </Nav.Link>
+            {user && (
+              <Nav.Link
+                as={NavLink}
+                to="/notifications"
+                aria-label="Notifications"
+              >
+                <Icon name="bell" />
+                {unread.count > 0 && (
+                  <Badge bg="danger" pill className="ms-1" data-testid="unread-count">
+                    {unread.count > 99 ? '99+' : unread.count}
+                  </Badge>
+                )}
+              </Nav.Link>
+            )}
             {user ? (
               <NavDropdown
                 align="end"

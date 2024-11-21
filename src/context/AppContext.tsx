@@ -3,6 +3,8 @@ import { api, AUTH_LOST_EVENT, unwrap } from '../api/client';
 import type { Cart, CategoryNode, Me } from '../api/types';
 import { clearTokens, getTokens, setTokens } from '../lib/auth-storage';
 
+const UNREAD_POLL_MS = 30_000;
+
 export interface Toast {
   id: number;
   message: string;
@@ -15,6 +17,7 @@ export interface AppContextValue {
   categories: CategoryNode[];
   cart: Cart | null;
   wishlistIds: number[];
+  unread: { count: number; checkedAt: number };
   toasts: Toast[];
   login: (email: string, password: string) => Promise<Me>;
   signup: (name: string, email: string, password: string) => Promise<Me>;
@@ -25,6 +28,7 @@ export interface AppContextValue {
   setCartQuantity: (productId: number, quantity: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
   toggleWishlist: (productId: number) => Promise<void>;
+  refreshUnread: () => Promise<void>;
   notify: (message: string, variant?: Toast['variant']) => void;
   dismissToast: (id: number) => void;
 }
@@ -39,6 +43,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [cart, setCart] = useState<Cart | null>(null);
   const [wishlistIds, setWishlistIds] = useState<number[]>([]);
+  const [unread, setUnread] = useState({ count: 0, checkedAt: 0 });
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   async function loadCart() {
@@ -55,6 +60,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setWishlistIds(data.items.map((i) => i.product.id));
     } catch {
       setWishlistIds([]);
+    }
+  }
+
+  async function loadUnread() {
+    try {
+      const data = await unwrap(api.GET('/notifications/unread-count'));
+      setUnread({ count: data.count, checkedAt: Date.now() });
+    } catch {
+      // badge is best effort
     }
   }
 
@@ -75,12 +89,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setUser(me);
     await loadCart();
     await loadWishlist();
+    await loadUnread();
   }
 
   function resetSession() {
     setUser(null);
     setCart(null);
     setWishlistIds([]);
+    setUnread({ count: 0, checkedAt: 0 });
   }
 
   useEffect(() => {
@@ -95,6 +111,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (me) {
         await loadCart();
         await loadWishlist();
+        await loadUnread();
       }
       setReady(true);
     })();
@@ -103,6 +120,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     window.addEventListener(AUTH_LOST_EVENT, onAuthLost);
     return () => window.removeEventListener(AUTH_LOST_EVENT, onAuthLost);
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    const timer = setInterval(loadUnread, UNREAD_POLL_MS);
+    return () => clearInterval(timer);
+  }, [user]);
 
   function notify(message: string, variant: Toast['variant'] = 'success') {
     const id = ++toastSeq;
@@ -116,6 +139,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     categories,
     cart,
     wishlistIds,
+    unread,
     toasts,
     async login(email, password) {
       const res = await unwrap(api.POST('/auth/login', { body: { email, password } }));
@@ -166,6 +190,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
       await loadWishlist();
     },
+    refreshUnread: loadUnread,
     notify,
     dismissToast(id) {
       setToasts((t) => t.filter((x) => x.id !== id));
