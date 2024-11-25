@@ -104,6 +104,11 @@ export function Header() {
                     {seller ? 'Seller application' : 'Sell on Bazario'}
                   </NavDropdown.Item>
                 )}
+                {user.role === 'admin' && (
+                  <NavDropdown.Item as={Link} to="/admin">
+                    Admin
+                  </NavDropdown.Item>
+                )}
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={onLogout}>
                   <Icon name="signOut" className="me-1" /> Log out

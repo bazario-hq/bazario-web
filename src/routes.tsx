@@ -1,6 +1,10 @@
 import type { RouteObject } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { RequireAuth } from './components/RequireAuth';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AuditLogPage } from './pages/admin/AuditLogPage';
+import { SellersPage } from './pages/admin/SellersPage';
+import { UsersPage } from './pages/admin/UsersPage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
 import { AccountPage } from './pages/buyer/AccountPage';
@@ -52,6 +56,15 @@ export const routes: RouteObject[] = [
           { path: 'products/:id', element: <ProductEditPage /> },
           { path: 'orders', element: <SellerOrdersPage /> },
           { path: 'orders/:orderId', element: <SellerOrderDetailPage /> },
+        ],
+      },
+      {
+        path: 'admin',
+        element: <RequireAuth role="admin"><AdminLayout /></RequireAuth>,
+        children: [
+          { path: 'users', element: <UsersPage /> },
+          { path: 'sellers', element: <SellersPage /> },
+          { path: 'audit-log', element: <AuditLogPage /> },
         ],
       },
       { path: '*', element: <NotFoundPage /> },
