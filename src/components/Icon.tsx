@@ -23,6 +23,10 @@ const ICONS = {
   shield: 'FaShieldAlt',
   list: 'FaListUl',
   signOut: 'FaSignOutAlt',
+  chevronLeft: 'FaChevronLeft',
+  chevronRight: 'FaChevronRight',
+  tag: 'FaTag',
+  fire: 'FaFire',
   image: 'FaImage',
   upload: 'FaUpload',
 } as const;
