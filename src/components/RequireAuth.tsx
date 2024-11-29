@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { EmptyState } from './Feedback';
 
 export function RequireAuth({ children, role }: { children: ReactNode; role?: 'seller' | 'admin' }) {
   const { user } = useApp();
+  const location = useLocation();
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={`/login?next=${encodeURIComponent(location.pathname + location.search)}`} replace />;
   }
   if (role === 'admin' && user.role !== 'admin') {
     return <EmptyState title="You don't have access to this page." />;
