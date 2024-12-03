@@ -2,6 +2,7 @@ import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import type { ProductCard as ProductCardData } from '../api/types';
 import { useApp } from '../context/AppContext';
+import { useWindowWidth } from '../hooks/useWindowWidth';
 import { categoryPath } from '../lib/categories';
 import { PLACEHOLDER_IMAGE } from './placeholder';
 import { Price } from './Price';
@@ -14,6 +15,8 @@ export function productUrl(p: { id: number; slug: string }) {
 
 export function ProductCard({ product }: { product: ProductCardData }) {
   const { categories } = useApp();
+  const width = useWindowWidth();
+  const compact = width < 576;
   const path = categoryPath(categories, product.categoryId);
   const category = path[path.length - 1];
 
@@ -29,7 +32,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             {product.name}
           </Link>
         </Card.Title>
-        <p className="product-card-description text-muted small mb-2">{product.description}</p>
+        {!compact && <p className="product-card-description text-muted small mb-2">{product.description}</p>}
         <div className="mb-1">
           <Rating avg={product.ratingAvg} count={product.ratingCount} />
         </div>
