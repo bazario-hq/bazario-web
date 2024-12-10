@@ -11,6 +11,7 @@ import { QuantityStepper } from '../../components/QuantityStepper';
 import { Rating } from '../../components/Rating';
 import { useApi } from '../../hooks/useApi';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { rememberViewed } from '../../lib/recently-viewed';
 import { ReviewsSection } from './ReviewsSection';
 
 export function ProductPage() {
@@ -27,6 +28,12 @@ export function ProductPage() {
     setQuantity(1);
     window.scrollTo(0, 0);
   }, [productId]);
+
+  useEffect(() => {
+    if (product) {
+      rememberViewed(product);
+    }
+  }, [product?.id]);
 
   if (loading && product?.id !== productId) return <Loading />;
   if (error || !product) return <ErrorAlert error={error} onRetry={reload} />;
