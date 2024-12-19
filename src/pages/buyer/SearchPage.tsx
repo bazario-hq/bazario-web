@@ -6,9 +6,11 @@ import type { ProductCard, ProductSearchResponse, SortOption } from '../../api/t
 import { EmptyState, ErrorAlert, Loading } from '../../components/Feedback';
 import { ProductGrid } from '../../components/ProductGrid';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { formatMoney } from '../../lib/format';
 import { SORT_LABELS } from './sort';
 
 const PAGE_SIZE = 24;
+const PRICE_MAX_CENTS = 50_000;
 
 function readFilters(params: URLSearchParams) {
   const num = (k: string) => (params.get(k) ? Number(params.get(k)) : undefined);
@@ -119,6 +121,32 @@ export function SearchPage() {
               ))}
             </ul>
           </div>
+
+          <Form.Group className="mb-3">
+            <div className="fw-bold small mb-1">Price</div>
+            <Form.Label className="small mb-0" htmlFor="min-price">
+              Min: {formatMoney(filters.minPrice ?? 0)}
+            </Form.Label>
+            <Form.Range
+              id="min-price"
+              min={0}
+              max={PRICE_MAX_CENTS}
+              step={500}
+              value={filters.minPrice ?? 0}
+              onChange={(e) => update({ minPrice: e.target.value })}
+            />
+            <Form.Label className="small mb-0" htmlFor="max-price">
+              Max: {filters.maxPrice != null ? formatMoney(filters.maxPrice) : 'Any'}
+            </Form.Label>
+            <Form.Range
+              id="max-price"
+              min={0}
+              max={PRICE_MAX_CENTS}
+              step={500}
+              value={filters.maxPrice ?? PRICE_MAX_CENTS}
+              onChange={(e) => update({ maxPrice: e.target.value === String(PRICE_MAX_CENTS) ? undefined : e.target.value })}
+            />
+          </Form.Group>
 
           <Form.Group className="mb-3">
             <div className="fw-bold small mb-1">Rating</div>
