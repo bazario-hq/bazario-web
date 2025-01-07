@@ -15,4 +15,15 @@ describe('format', () => {
     expect(centsToDollars(1999)).toBe('19.99');
     expect(centsToDollars(null)).toBe('');
   });
+
+  it('computes percentage change', () => {
+    expect(percentChange(150, 100)).toBe(50);
+    expect(percentChange(50, 100)).toBe(-50);
+    expect(percentChange(0, 0)).toBe(0);
+    expect(percentChange(10, 0)).toBeNull();
+  });
+
+  it('formats months', () => {
+    expect(formatMonth('2026-03')).toBe('Mar 2026');
+  });
 });
