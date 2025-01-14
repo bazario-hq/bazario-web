@@ -1,7 +1,7 @@
 import * as Fa from 'react-icons/fa';
 import type { IconBaseProps } from 'react-icons';
 
-// Icon names used across the app.
+// Icon names used across the app. Keep this list in sync with the design kit (BZR-141).
 const ICONS = {
   cart: 'FaShoppingCart',
   heart: 'FaHeart',
@@ -10,6 +10,8 @@ const ICONS = {
   user: 'FaUserCircle',
   search: 'FaSearch',
   star: 'FaStar',
+  starHalf: 'FaStarHalfAlt',
+  starOutline: 'FaRegStar',
   store: 'FaStore',
   box: 'FaBox',
   truck: 'FaTruck',
@@ -29,6 +31,8 @@ const ICONS = {
   fire: 'FaFire',
   image: 'FaImage',
   upload: 'FaUpload',
+  info: 'FaInfoCircle',
+  exclamation: 'FaExclamationTriangle',
 } as const;
 
 export type IconName = keyof typeof ICONS;
