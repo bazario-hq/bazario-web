@@ -21,6 +21,7 @@ import { SellApplyPage } from './pages/buyer/SellApplyPage';
 import { StorefrontPage } from './pages/buyer/StorefrontPage';
 import { WishlistPage } from './pages/buyer/WishlistPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { InventoryPage } from './pages/seller/InventoryPage';
 import { ProductEditPage } from './pages/seller/ProductEditPage';
 import { ProductsPage } from './pages/seller/ProductsPage';
 import { SellerLayout } from './pages/seller/SellerLayout';
@@ -54,6 +55,7 @@ export const routes: RouteObject[] = [
           { path: 'products', element: <ProductsPage /> },
           { path: 'products/new', element: <ProductEditPage /> },
           { path: 'products/:id', element: <ProductEditPage /> },
+          { path: 'inventory', element: <InventoryPage /> },
           { path: 'orders', element: <SellerOrdersPage /> },
           { path: 'orders/:orderId', element: <SellerOrderDetailPage /> },
         ],

@@ -5,6 +5,7 @@ import { useApp } from '../../context/AppContext';
 
 const LINKS: [string, string, IconName][] = [
   ['/seller/products', 'Products', 'box'],
+  ['/seller/inventory', 'Inventory', 'warehouse'],
   ['/seller/orders', 'Orders', 'truck'],
 ];
 

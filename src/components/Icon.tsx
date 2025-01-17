@@ -21,6 +21,7 @@ const ICONS = {
   plus: 'FaPlus',
   minus: 'FaMinus',
   edit: 'FaEdit',
+  warehouse: 'FaWarehouse',
   users: 'FaUsers',
   shield: 'FaShieldAlt',
   list: 'FaListUl',
@@ -31,6 +32,7 @@ const ICONS = {
   fire: 'FaFire',
   image: 'FaImage',
   upload: 'FaUpload',
+  history: 'FaHistory',
   info: 'FaInfoCircle',
   exclamation: 'FaExclamationTriangle',
 } as const;
