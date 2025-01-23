@@ -21,6 +21,7 @@ const ICONS = {
   plus: 'FaPlus',
   minus: 'FaMinus',
   edit: 'FaEdit',
+  chart: 'FaChartLine',
   warehouse: 'FaWarehouse',
   users: 'FaUsers',
   shield: 'FaShieldAlt',

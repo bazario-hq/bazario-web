@@ -4,6 +4,7 @@ import { Icon, type IconName } from '../../components/Icon';
 import { useApp } from '../../context/AppContext';
 
 const LINKS: [string, string, IconName][] = [
+  ['/seller', 'Dashboard', 'chart'],
   ['/seller/products', 'Products', 'box'],
   ['/seller/inventory', 'Inventory', 'warehouse'],
   ['/seller/orders', 'Orders', 'truck'],

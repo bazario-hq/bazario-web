@@ -1,5 +1,5 @@
 /**
- * Generated from openapi/openapi.json (bazario-hq/bazario-api@55bff2d18b61947e235bf03f8e83116fb9790ef5).
+ * Generated from openapi/openapi.json (bazario-hq/bazario-api@8a0fdf9606f13887a6b603a17bb12ce769b42b64).
  * Do not edit by hand: run `npm run api:generate`.
  */
 
@@ -2119,6 +2119,62 @@ export interface paths {
         };
         trace?: never;
     };
+    "/seller/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Sales KPIs and charts for your store */
+        get: {
+            parameters: {
+                query?: {
+                    range?: "7d" | "30d" | "90d" | "mtd";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Dashboard */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SellerDashboard"];
+                    };
+                };
+                /** @description Invalid request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Not authenticated */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/seller/products": {
         parameters: {
             query?: never;
@@ -3518,6 +3574,46 @@ export interface components {
                 shippedAt: string | null;
                 deliveredAt: string | null;
             }[];
+        };
+        SellerDashboard: {
+            range: {
+                from: string;
+                to: string;
+            };
+            kpis: {
+                revenueCents: number;
+                orders: number;
+                units: number;
+                averageOrderCents: number;
+                customers: number;
+            };
+            previous: {
+                revenueCents: number;
+                orders: number;
+                units: number;
+                averageOrderCents: number;
+                customers: number;
+            };
+            salesByDay: {
+                date: string;
+                revenueCents: number;
+                orders: number;
+            }[];
+            topProducts: {
+                productId: number;
+                name: string;
+                units: number;
+                revenueCents: number;
+            }[];
+            lowStock: {
+                count: number;
+                items: {
+                    productId: number;
+                    name: string;
+                    stock: number;
+                }[];
+            };
+            pendingShipments: number;
         };
     };
     responses: never;
