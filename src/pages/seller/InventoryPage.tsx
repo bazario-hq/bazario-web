@@ -12,6 +12,56 @@ import { useApi } from '../../hooks/useApi';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { formatDateTime } from '../../lib/format';
 
+function HistoryModal({ row, onClose }: { row: InventoryRow; onClose: () => void }) {
+  const { data, error, loading } = useApi(
+    () => unwrap(api.GET('/seller/inventory/{productId}/history', { params: { path: { productId: row.productId } } })),
+    [row.productId],
+  );
+  return (
+    <Modal show onHide={onClose} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title className="h5">Stock history · {row.name}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {loading && <Loading />}
+        {Boolean(error) && <ErrorAlert error={error} />}
+        {data && (
+          <Table size="sm">
+            <thead>
+              <tr>
+                <th>When</th>
+                <th>Reason</th>
+                <th className="text-end">Change</th>
+                <th className="text-end">Stock after</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.items.map((a) => (
+                <tr key={a.id}>
+                  <td>{formatDateTime(a.createdAt)}</td>
+                  <td>{a.reason}</td>
+                  <td className={`text-end ${a.delta < 0 ? 'text-danger' : 'text-success'}`}>
+                    {a.delta > 0 ? '+' : ''}
+                    {a.delta}
+                  </td>
+                  <td className="text-end">{a.stockAfter}</td>
+                </tr>
+              ))}
+              {data.items.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="text-muted">
+                    No adjustments yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        )}
+      </Modal.Body>
+    </Modal>
+  );
+}
+
 export function InventoryPage() {
   useDocumentTitle('Inventory');
   const { notify } = useApp();
@@ -27,6 +77,7 @@ export function InventoryPage() {
   const [reason, setReason] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [history, setHistory] = useState<InventoryRow | null>(null);
 
   const changed = (data?.items ?? []).filter((r) => edits[r.productId] !== undefined && edits[r.productId] !== String(r.stock));
 
@@ -134,6 +185,7 @@ export function InventoryPage() {
         </div>
       )}
       {data && <Pager page={page} totalPages={data.meta.totalPages} onChange={(p) => update({ page: String(p) })} />}
+      {history && <HistoryModal row={history} onClose={() => setHistory(null)} />}
     </>
   );
 }
