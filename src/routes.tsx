@@ -23,6 +23,7 @@ import { WishlistPage } from './pages/buyer/WishlistPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { DashboardPage } from './pages/seller/DashboardPage';
 import { InventoryPage } from './pages/seller/InventoryPage';
+import { PayoutsPage } from './pages/seller/PayoutsPage';
 import { ProductEditPage } from './pages/seller/ProductEditPage';
 import { ProductsPage } from './pages/seller/ProductsPage';
 import { SellerLayout } from './pages/seller/SellerLayout';
@@ -60,6 +61,7 @@ export const routes: RouteObject[] = [
           { path: 'inventory', element: <InventoryPage /> },
           { path: 'orders', element: <SellerOrdersPage /> },
           { path: 'orders/:orderId', element: <SellerOrderDetailPage /> },
+          { path: 'payouts', element: <PayoutsPage /> },
         ],
       },
       {

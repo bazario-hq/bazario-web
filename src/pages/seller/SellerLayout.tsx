@@ -8,6 +8,7 @@ const LINKS: [string, string, IconName][] = [
   ['/seller/products', 'Products', 'box'],
   ['/seller/inventory', 'Inventory', 'warehouse'],
   ['/seller/orders', 'Orders', 'truck'],
+  ['/seller/payouts', 'Payouts', 'money'],
 ];
 
 export function SellerLayout() {

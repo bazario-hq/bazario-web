@@ -23,6 +23,7 @@ const ICONS = {
   edit: 'FaEdit',
   chart: 'FaChartLine',
   warehouse: 'FaWarehouse',
+  money: 'FaMoneyBillWave',
   users: 'FaUsers',
   shield: 'FaShieldAlt',
   list: 'FaListUl',

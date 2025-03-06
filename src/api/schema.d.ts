@@ -1,5 +1,5 @@
 /**
- * Generated from openapi/openapi.json (bazario-hq/bazario-api@8a0fdf9606f13887a6b603a17bb12ce769b42b64).
+ * Generated from openapi/openapi.json (bazario-hq/bazario-api@708718347d3aaea9b73ef65e54612a7475c26ab5).
  * Do not edit by hand: run `npm run api:generate`.
  */
 
@@ -3033,6 +3033,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/seller/payouts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Monthly earnings and payout status for the last 12 months */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Payouts */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SellerPayouts"];
+                    };
+                };
+                /** @description Not authenticated */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/wishlist": {
         parameters: {
             query?: never;
@@ -3614,6 +3659,23 @@ export interface components {
                 }[];
             };
             pendingShipments: number;
+        };
+        SellerPayouts: {
+            feePercent: number;
+            months: {
+                month: string;
+                grossCents: number;
+                feeCents: number;
+                netCents: number;
+                /** @enum {string} */
+                status: "open" | "scheduled" | "paid";
+                paidAt: string | null;
+            }[];
+            totals: {
+                grossCents: number;
+                feeCents: number;
+                netCents: number;
+            };
         };
     };
     responses: never;
