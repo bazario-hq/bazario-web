@@ -26,6 +26,7 @@ import { InventoryPage } from './pages/seller/InventoryPage';
 import { PayoutsPage } from './pages/seller/PayoutsPage';
 import { ProductEditPage } from './pages/seller/ProductEditPage';
 import { ProductsPage } from './pages/seller/ProductsPage';
+import { ProfilePage } from './pages/seller/ProfilePage';
 import { SellerLayout } from './pages/seller/SellerLayout';
 import { SellerOrderDetailPage } from './pages/seller/SellerOrderDetailPage';
 import { SellerOrdersPage } from './pages/seller/SellerOrdersPage';
@@ -62,6 +63,7 @@ export const routes: RouteObject[] = [
           { path: 'orders', element: <SellerOrdersPage /> },
           { path: 'orders/:orderId', element: <SellerOrderDetailPage /> },
           { path: 'payouts', element: <PayoutsPage /> },
+          { path: 'profile', element: <ProfilePage /> },
         ],
       },
       {

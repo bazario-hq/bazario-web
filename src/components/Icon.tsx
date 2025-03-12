@@ -24,6 +24,7 @@ const ICONS = {
   chart: 'FaChartLine',
   warehouse: 'FaWarehouse',
   money: 'FaMoneyBillWave',
+  cog: 'FaCog',
   users: 'FaUsers',
   shield: 'FaShieldAlt',
   list: 'FaListUl',
