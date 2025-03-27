@@ -52,6 +52,43 @@ describe('Rating', () => {
   });
 });
 
+describe('StatusBadge', () => {
+  it('title-cases the status', () => {
+    render(<StatusBadge status="partially_shipped" />);
+    expect(screen.getByText('Partially Shipped')).toHaveAttribute('data-status', 'partially_shipped');
+  });
+});
+
+describe('ProductCard', () => {
+  const categories = [{ id: 1, name: 'Home', slug: 'home', children: [{ id: 3, name: 'Textiles', slug: 'textiles', children: [] }] }];
+
+  it('shows the product, its category and links to the product page', () => {
+    renderWithApp(<ProductCard product={product} />, { app: fakeApp({ categories }) });
+    for (const link of screen.getAllByRole('link', { name: 'Indigo Batik Throw' })) expect(link).toHaveAttribute('href', '/p/7/indigo-batik-throw');
+    expect(screen.getByText('Textiles')).toBeInTheDocument();
+    expect(screen.getByText('Lanka Looms')).toBeInTheDocument();
+  });
+
+  it('sends anonymous shoppers to log in', async () => {
+    renderWithApp(<ProductCard product={product} />);
+    fireEvent.click(screen.getByRole('button', { name: /Add to cart/ }));
+    expect(await screen.findByText('login page')).toBeInTheDocument();
+  });
+
+  it('adds to cart for signed-in shoppers', async () => {
+    const app = fakeApp({ user: { id: 1, email: 'a@b.c', name: 'A', role: 'buyer', createdAt: '', seller: null } });
+    renderWithApp(<ProductCard product={product} />, { app });
+    fireEvent.click(screen.getByRole('button', { name: /Add to cart/ }));
+    await waitFor(() => expect(app.addToCart).toHaveBeenCalledWith(7, 1));
+    expect(app.notify).toHaveBeenCalledWith('Added to cart');
+  });
+
+  it('shows a disabled button when out of stock', () => {
+    renderWithApp(<ProductCard product={{ ...product, stock: 0 }} />);
+    expect(screen.getByRole('button', { name: 'Out of stock' })).toBeDisabled();
+  });
+});
+
 describe('MemoryRouter sanity', () => {
   it('renders', () => {
     render(<MemoryRouter><span>ok</span></MemoryRouter>);
