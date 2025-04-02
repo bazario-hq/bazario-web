@@ -95,6 +95,10 @@ export function SearchPage() {
     <Row>
       <Col lg={3} className="mb-4">
         <aside className="filters" aria-label="Filters">
+          <Form.Group className="mb-3" controlId="refine-q">
+            <Form.Label className="fw-bold small">Search within results</Form.Label>
+            <Form.Control type="search" value={filters.q} placeholder="Keywords" onChange={(e) => update({ q: e.target.value })} />
+          </Form.Group>
 
           <div className="mb-3">
             <div className="fw-bold small mb-1">Category</div>

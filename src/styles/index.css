@@ -125,6 +125,10 @@ body {
   background-color: var(--bz-navy);
 }
 
+.facet-list li {
+  margin-bottom: 0.15rem;
+}
+
 .object-fit-cover {
   object-fit: cover;
 }
