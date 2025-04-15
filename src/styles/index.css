@@ -5,11 +5,19 @@
   --bs-primary-rgb: 31, 58, 95;
   --bs-link-color: #24548a;
   --bs-link-color-rgb: 36, 84, 138;
-  --bs-body-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --bs-body-font-family: 'Bazario Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
   font-size: 1.0625rem;
+}
+
+h1,
+h2,
+.brand,
+.display-5 {
+  font-family: 'Bazario Display', Georgia, serif;
+  font-weight: 700;
 }
 
 .btn-primary {
