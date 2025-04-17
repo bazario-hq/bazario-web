@@ -13,6 +13,18 @@ export function HomePage() {
 
   return (
     <>
+      <section className="hero mb-5">
+        <img src="/images/hero-market.png" alt="" className="hero-image" />
+        <div className="hero-copy">
+          <h1 className="display-5">Find something made with care</h1>
+          <p className="lead">Thousands of independent sellers. One cart.</p>
+          <div>
+            <Link to="/search" className="btn btn-warning btn-lg">
+              Start shopping
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {loading && <Loading />}
       {Boolean(error) && <ErrorAlert error={error} onRetry={reload} />}
