@@ -68,6 +68,7 @@ export function Header() {
                 as={NavLink}
                 to="/notifications"
                 aria-label="Notifications"
+                title={unread.checkedAt ? `Last checked ${formatDateTime(new Date(unread.checkedAt))}` : undefined}
               >
                 <Icon name="bell" />
                 {unread.count > 0 && (
