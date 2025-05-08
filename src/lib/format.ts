@@ -1,4 +1,8 @@
 import moment from 'moment';
+import 'moment/min/locales';
+
+// BZR-233: show dates in the shopper's language (we have a lot of si/ta customers).
+moment.locale(typeof navigator !== 'undefined' ? [...navigator.languages, 'en'] : ['en']);
 
 const moneyFormats = new Map<string, Intl.NumberFormat>();
 
