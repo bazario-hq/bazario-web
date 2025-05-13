@@ -38,6 +38,8 @@ export function ProductPage() {
   if (loading && product?.id !== productId) return <Loading />;
   if (error || !product) return <ErrorAlert error={error} onRetry={reload} />;
 
+  const specs = Object.entries(product.specs);
+
   return (
     <>
       <nav aria-label="breadcrumb">
@@ -91,6 +93,18 @@ export function ProductPage() {
               <p key={i}>{para}</p>
             ))}
           </div>
+          {specs.length > 0 && (
+            <Table size="sm" className="specs-table">
+              <tbody>
+                {specs.map(([k, v]) => (
+                  <tr key={k}>
+                    <th className="text-capitalize fw-normal text-muted">{k}</th>
+                    <td>{v}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
 
