@@ -9,6 +9,7 @@ import { AddToCartButton, WishlistButton } from '../../components/ProductActions
 import { ProductGrid } from '../../components/ProductGrid';
 import { QuantityStepper } from '../../components/QuantityStepper';
 import { Rating } from '../../components/Rating';
+import { RatingHistogram } from '../../components/RatingHistogram';
 import { useApi } from '../../hooks/useApi';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { rememberViewed } from '../../lib/recently-viewed';
@@ -111,7 +112,7 @@ export function ProductPage() {
       <Row className="mt-5 g-4">
         <Col md={4}>
           <h2 className="h5">Customer ratings</h2>
-          <Rating avg={product.ratingAvg} count={product.ratingCount} />
+          <RatingHistogram histogram={product.ratingHistogram as Record<string, number>} total={product.ratingCount} />
         </Col>
         <Col md={8}>
           <ReviewsSection productId={product.id} onChanged={reload} />
