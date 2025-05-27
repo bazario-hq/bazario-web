@@ -43,4 +43,17 @@ describe('api client auth', () => {
     expect(lost).toHaveBeenCalledOnce();
     window.removeEventListener(AUTH_LOST_EVENT, lost);
   });
+
+  it('does not try to refresh without a session', async () => {
+    fetchMock.mockResolvedValueOnce(json(401, { error: { code: 'unauthorized', message: 'no token' } }));
+    await expect(unwrap(api.GET('/cart'))).rejects.toBeInstanceOf(ApiError);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('turns API errors into ApiError with code and details', async () => {
+    fetchMock.mockResolvedValueOnce(json(422, { error: { code: 'unprocessable', message: 'Your cart is empty', details: [{ productId: 1 }] } }));
+    const err = await unwrap(api.POST('/checkout/quote', { body: { shippingAddress: { fullName: 'a', line1: 'b', city: 'c', postalCode: 'd', country: 'LK' } } })).catch((e) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect(err).toMatchObject({ status: 422, code: 'unprocessable', message: 'Your cart is empty', details: [{ productId: 1 }] });
+  });
 });
