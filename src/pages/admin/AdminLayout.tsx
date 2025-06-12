@@ -11,6 +11,9 @@ export function AdminLayout() {
         <Nav.Link as={NavLink} to="/admin/sellers">
           Sellers
         </Nav.Link>
+        <Nav.Link as={NavLink} to="/admin/reviews">
+          Reviews
+        </Nav.Link>
         <Nav.Link as={NavLink} to="/admin/audit-log">
           Audit log
         </Nav.Link>

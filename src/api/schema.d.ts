@@ -1,5 +1,5 @@
 /**
- * Generated from openapi/openapi.json (bazario-hq/bazario-api@708718347d3aaea9b73ef65e54612a7475c26ab5).
+ * Generated from openapi/openapi.json (bazario-hq/bazario-api@941b08112c09ab4b53a7eb87a29368bb178f8672).
  * Do not edit by hand: run `npm run api:generate`.
  */
 
@@ -228,6 +228,141 @@ export interface paths {
                     "application/json": {
                         /** @enum {string} */
                         status: "pending" | "active" | "suspended";
+                    };
+                };
+            };
+            responses: {
+                /** @description Updated */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            id: number;
+                            status: string;
+                        };
+                    };
+                };
+                /** @description Invalid request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Not authenticated */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/admin/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Review moderation queue (oldest first) */
+        get: {
+            parameters: {
+                query?: {
+                    status?: "published" | "pending" | "rejected";
+                    page?: number;
+                    pageSize?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Reviews */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            items: components["schemas"]["ModerationReview"][];
+                            meta: components["schemas"]["PageMeta"];
+                        };
+                    };
+                };
+                /** @description Invalid request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Not authenticated */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reviews/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Publish or reject a review */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        status: "published" | "rejected";
+                        note?: string;
                     };
                 };
             };
@@ -3291,6 +3426,24 @@ export interface components {
             productCount: number;
             createdAt: string;
             approvedAt: string | null;
+        };
+        ModerationReview: {
+            id: number;
+            rating: number;
+            title: string;
+            body: string;
+            /** @enum {string} */
+            status: "published" | "pending" | "rejected";
+            moderationNote: string | null;
+            author: {
+                id: number;
+                name: string;
+            };
+            product: {
+                id: number;
+                name: string;
+            };
+            createdAt: string;
         };
         AuditEntry: {
             id: number;

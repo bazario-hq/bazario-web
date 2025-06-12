@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { RequireAuth } from './components/RequireAuth';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AuditLogPage } from './pages/admin/AuditLogPage';
+import { ReviewsPage } from './pages/admin/ReviewsPage';
 import { SellersPage } from './pages/admin/SellersPage';
 import { UsersPage } from './pages/admin/UsersPage';
 import { LoginPage } from './pages/auth/LoginPage';
@@ -72,6 +73,7 @@ export const routes: RouteObject[] = [
         children: [
           { path: 'users', element: <UsersPage /> },
           { path: 'sellers', element: <SellersPage /> },
+          { path: 'reviews', element: <ReviewsPage /> },
           { path: 'audit-log', element: <AuditLogPage /> },
         ],
       },
