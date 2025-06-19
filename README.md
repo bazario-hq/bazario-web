@@ -7,7 +7,7 @@ The Bazario storefront, seller area and admin console: a React single-page app t
 - React 18, TypeScript, Vite 5, React Router 6
 - React Bootstrap (Bootstrap 5) for UI, Recharts for charts, react-hook-form for checkout
 - API client generated from the API's OpenAPI spec (`openapi-typescript` + `openapi-fetch`)
-- Vitest + React Testing Library for unit tests
+- Vitest + React Testing Library for unit tests, Playwright for end-to-end tests
 
 ## Layout
 
@@ -23,6 +23,7 @@ src/
 public/           static files served as-is (analytics tag, hero image)
 openapi/          the API contract this app was built against (+ where it came from)
 tests/unit/       Vitest tests
+e2e/              Playwright specs, fixtures and the local test stack
 ```
 
 ## Running locally
@@ -61,6 +62,16 @@ npm test                   # unit tests (Vitest, jsdom)
 npm run lint
 npm run typecheck
 ```
+
+End-to-end tests drive a production build of the app in Chromium against the **real** API and Postgres:
+
+```sh
+(cd ../bazario-api && npm ci)   # the suite starts the API from ../bazario-api (override with API_DIR)
+npm run e2e:db                  # Postgres in Docker on :55433
+npm run e2e
+```
+
+`e2e/stack/start-api.mjs` recreates the `bazario_e2e` database, runs the API's migrations, loads the fixtures in `e2e/stack/seed.mjs`, starts a local S3-compatible server for product images and then the API on :3999. Playwright then builds the app and serves it with `vite preview` on :4173.
 
 ## Building
 

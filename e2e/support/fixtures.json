@@ -1,0 +1,23 @@
+{
+  "password": "bazario-e2e-pass",
+  "admin": { "email": "ava.admin@bazario.example", "name": "Ava Admin" },
+  "buyer": { "email": "ben.buyer@bazario.example", "name": "Ben Buyer" },
+  "seller": { "email": "sam.seller@bazario.example", "name": "Sam Seller", "store": "Lanka Looms", "slug": "lanka-looms" },
+  "seller2": { "email": "mia.maker@bazario.example", "name": "Mia Maker", "store": "Kandy Kitchen", "slug": "kandy-kitchen" },
+  "applicant": { "email": "pat.pending@bazario.example", "name": "Pat Pending", "store": "Galle Glassworks", "slug": "galle-glassworks" },
+  "products": {
+    "throw": { "name": "Indigo Batik Throw", "priceCents": 4200, "compareAtCents": 5200 },
+    "pot": { "name": "Clay Curry Pot", "priceCents": 1850, "stock": 2 },
+    "kettle": { "name": "Brass Kettle", "priceCents": 6500, "stock": 0 },
+    "spoons": { "name": "Teak Spoon Set", "priceCents": 1200 }
+  },
+  "loomsProductCount": 40,
+  "categories": {
+    "home": "home-living",
+    "textiles": "textiles",
+    "cushions": "cushions",
+    "kitchen": "kitchen",
+    "cookware": "cookware",
+    "toys": "toys"
+  }
+}
