@@ -52,4 +52,14 @@ test.describe('accounts', () => {
     await expect(page).toHaveURL(/\/orders$/);
     await expect(page.getByRole('heading', { name: 'Your orders' })).toBeVisible();
   });
+
+  test('an expired access token is refreshed silently', async ({ page, request }) => {
+    const session = await apiLogin(request, fx.buyer.email);
+    await applySession(page, { accessToken: 'expired.or.invalid', refreshToken: session.refreshToken });
+    await page.goto('/orders');
+    await expect(page.getByRole('heading', { name: 'Your orders' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Ben' })).toBeVisible();
+    const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('bz.auth') ?? '{}'));
+    expect(stored.refreshToken).not.toBe(session.refreshToken);
+  });
 });
