@@ -1,5 +1,5 @@
 /**
- * Generated from openapi/openapi.json (bazario-hq/bazario-api@941b08112c09ab4b53a7eb87a29368bb178f8672).
+ * Generated from openapi/openapi.json (bazario-hq/bazario-api@1b120b314cbfd015db8e7690f8a1283ab8231d68).
  * Do not edit by hand: run `npm run api:generate`.
  */
 
@@ -406,6 +406,62 @@ export interface paths {
                 };
             };
         };
+        trace?: never;
+    };
+    "/admin/reports/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Platform totals and monthly trends */
+        get: {
+            parameters: {
+                query?: {
+                    months?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Report */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReportOverview"];
+                    };
+                };
+                /** @description Invalid request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Not authenticated */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/admin/audit-log": {
@@ -3444,6 +3500,28 @@ export interface components {
                 name: string;
             };
             createdAt: string;
+        };
+        ReportOverview: {
+            totals: {
+                gmvCents: number;
+                orders: number;
+                users: number;
+                activeProducts: number;
+                activeSellers: number;
+            };
+            months: {
+                month: string;
+                orders: number;
+                gmvCents: number;
+                buyers: number;
+                signups: number;
+            }[];
+            topSellers: {
+                sellerId: number;
+                storeName: string;
+                gmvCents: number;
+                orders: number;
+            }[];
         };
         AuditEntry: {
             id: number;

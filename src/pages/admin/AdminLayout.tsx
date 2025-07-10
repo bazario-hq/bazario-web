@@ -5,6 +5,9 @@ export function AdminLayout() {
   return (
     <>
       <Nav variant="tabs" className="mb-4" aria-label="Admin navigation">
+        <Nav.Link as={NavLink} to="/admin" end>
+          Overview
+        </Nav.Link>
         <Nav.Link as={NavLink} to="/admin/users">
           Users
         </Nav.Link>

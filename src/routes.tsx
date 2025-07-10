@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { RequireAuth } from './components/RequireAuth';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AuditLogPage } from './pages/admin/AuditLogPage';
+import { OverviewPage } from './pages/admin/OverviewPage';
 import { ReviewsPage } from './pages/admin/ReviewsPage';
 import { SellersPage } from './pages/admin/SellersPage';
 import { UsersPage } from './pages/admin/UsersPage';
@@ -71,6 +72,7 @@ export const routes: RouteObject[] = [
         path: 'admin',
         element: <RequireAuth role="admin"><AdminLayout /></RequireAuth>,
         children: [
+          { index: true, element: <OverviewPage /> },
           { path: 'users', element: <UsersPage /> },
           { path: 'sellers', element: <SellersPage /> },
           { path: 'reviews', element: <ReviewsPage /> },
