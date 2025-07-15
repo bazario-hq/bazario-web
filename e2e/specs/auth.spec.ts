@@ -62,4 +62,11 @@ test.describe('accounts', () => {
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('bz.auth') ?? '{}'));
     expect(stored.refreshToken).not.toBe(session.refreshToken);
   });
+
+  test('a revoked session logs the user out', async ({ page }) => {
+    await applySession(page, { accessToken: 'bad', refreshToken: 'also-not-a-valid-refresh-token' });
+    await page.goto('/');
+    await expect(page.getByRole('link', { name: 'Log in' })).toBeVisible();
+    expect(await page.evaluate(() => localStorage.getItem('bz.auth'))).toBeNull();
+  });
 });
