@@ -27,6 +27,11 @@ test.describe('browsing', () => {
     expect(cents).toEqual([...cents].sort((a, b) => b - a));
   });
 
+  test('empty category shows an empty state', async ({ page }) => {
+    await page.goto(`/c/${fx.categories.toys}`);
+    await expect(page.getByText('No products in this category yet')).toBeVisible();
+  });
+
   test('product page shows details, gallery, ratings and reviews', async ({ page }) => {
     await page.goto('/search?q=' + encodeURIComponent(fx.products.throw.name));
     await page.locator('[data-product-card]').filter({ hasText: fx.products.throw.name }).getByRole('heading').getByRole('link').click();
@@ -41,5 +46,10 @@ test.describe('browsing', () => {
     await page.getByLabel('Sort reviews').selectOption('lowest');
     await expect(page.getByTestId('review').first()).toContainText('Good quality');
     await expect(page.getByRole('cell', { name: '130 x 170 cm' })).toBeVisible();
+  });
+
+  test('unknown pages show a not found message', async ({ page }) => {
+    await page.goto('/no-such-page');
+    await expect(page.getByText("We couldn't find that page")).toBeVisible();
   });
 });
