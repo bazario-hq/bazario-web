@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { api, AUTH_LOST_EVENT, unwrap } from '../api/client';
 import type { Cart, CategoryNode, Me } from '../api/types';
+import { identify, track } from '../lib/analytics';
 import { clearTokens, getTokens, setTokens } from '../lib/auth-storage';
 
 const UNREAD_POLL_MS = 30_000;
@@ -77,6 +78,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       const me = await unwrap(api.GET('/auth/me'));
       setUser(me);
+      identify(me.id);
       return me;
     } catch {
       clearTokens();
@@ -87,6 +89,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   async function afterSignIn(me: Me) {
     setUser(me);
+    identify(me.id);
     await loadCart();
     await loadWishlist();
     await loadUnread();
@@ -97,6 +100,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setCart(null);
     setWishlistIds([]);
     setUnread({ count: 0, checkedAt: 0 });
+    identify(null);
   }
 
   useEffect(() => {
@@ -145,12 +149,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const res = await unwrap(api.POST('/auth/login', { body: { email, password } }));
       setTokens({ accessToken: res.accessToken, refreshToken: res.refreshToken });
       await afterSignIn(res.user);
+      track('login');
       return res.user;
     },
     async signup(name, email, password) {
       const res = await unwrap(api.POST('/auth/signup', { body: { name, email, password } }));
       setTokens({ accessToken: res.accessToken, refreshToken: res.refreshToken });
       await afterSignIn(res.user);
+      track('signup');
       return res.user;
     },
     async logout() {
@@ -173,6 +179,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const existing = cart?.items.find((i) => i.productId === productId)?.quantity ?? 0;
       await unwrap(api.PUT('/cart/items/{productId}', { params: { path: { productId } }, body: { quantity: existing + quantity } }));
       await loadCart();
+      track('add_to_cart', { productId, quantity });
     },
     async setCartQuantity(productId, quantity) {
       await unwrap(api.PUT('/cart/items/{productId}', { params: { path: { productId } }, body: { quantity } }));
@@ -187,6 +194,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         await unwrap(api.DELETE('/wishlist/{productId}', { params: { path: { productId } } }));
       } else {
         await unwrap(api.PUT('/wishlist/{productId}', { params: { path: { productId } } }));
+        track('wishlist_add', { productId });
       }
       await loadWishlist();
     },

@@ -7,6 +7,7 @@ import { EmptyState, ErrorAlert, Loading } from '../../components/Feedback';
 import { ProductGrid } from '../../components/ProductGrid';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { formatMoney } from '../../lib/format';
+import { track } from '../../lib/analytics';
 import { SORT_LABELS } from './sort';
 
 const PAGE_SIZE = 24;
@@ -58,6 +59,7 @@ export function SearchPage() {
         setMeta(res.meta);
         setFacets(res.facets.categories);
         setPage(1);
+        if (filters.q) track('search', { q: filters.q, results: res.meta.total });
       })
       .catch(setError)
       .finally(() => setLoading(false));

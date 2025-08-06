@@ -7,6 +7,7 @@ import type { CheckoutQuote, ShippingAddress } from '../../api/types';
 import { EmptyState, Loading } from '../../components/Feedback';
 import { useApp } from '../../context/AppContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { track } from '../../lib/analytics';
 import { COUNTRIES } from '../../lib/countries';
 import { formatDateTime, formatMoney } from '../../lib/format';
 
@@ -56,6 +57,7 @@ export function CheckoutPage() {
       const q = await unwrap(api.POST('/checkout/quote', { body: { shippingAddress: body } }));
       localStorage.setItem(ADDRESS_KEY, JSON.stringify(body));
       setQuote(q);
+      track('checkout_quote', { total: q.totalCents });
     } catch (err) {
       if (err instanceof ApiError && Array.isArray(err.details)) setProblems(err.details as { name: string; available: number }[]);
       setError(errorMessage(err));
@@ -75,6 +77,7 @@ export function CheckoutPage() {
           },
         }),
       );
+      track('purchase', { orderId: order.id, total: order.totalCents });
       await refreshCart();
       navigate(`/orders/${order.id}?placed=1`);
     } catch (err) {

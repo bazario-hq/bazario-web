@@ -12,6 +12,7 @@ import { Rating } from '../../components/Rating';
 import { RatingHistogram } from '../../components/RatingHistogram';
 import { useApi } from '../../hooks/useApi';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { track } from '../../lib/analytics';
 import { rememberViewed } from '../../lib/recently-viewed';
 import { ReviewsSection } from './ReviewsSection';
 
@@ -33,6 +34,7 @@ export function ProductPage() {
   useEffect(() => {
     if (product) {
       rememberViewed(product);
+      track('product_view', { productId: product.id });
     }
   }, [product?.id]);
 
