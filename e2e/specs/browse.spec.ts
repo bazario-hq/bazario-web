@@ -48,6 +48,12 @@ test.describe('browsing', () => {
     await expect(page.getByRole('cell', { name: '130 x 170 cm' })).toBeVisible();
   });
 
+  test('out of stock products cannot be added to the cart', async ({ page }) => {
+    await page.goto('/search?q=' + encodeURIComponent(fx.products.kettle.name));
+    const card = page.locator('[data-product-card]').filter({ hasText: fx.products.kettle.name });
+    await expect(card.getByRole('button', { name: 'Out of stock' })).toBeDisabled();
+  });
+
   test('unknown pages show a not found message', async ({ page }) => {
     await page.goto('/no-such-page');
     await expect(page.getByText("We couldn't find that page")).toBeVisible();
