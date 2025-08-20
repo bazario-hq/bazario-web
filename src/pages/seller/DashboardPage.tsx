@@ -8,8 +8,8 @@ import { useApi } from '../../hooks/useApi';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { formatDate, formatMoney, formatNumber, percentChange } from '../../lib/format';
 
-type Range = '7d' | '30d' | '90d';
-const RANGES: Record<Range, string> = { '7d': 'Last 7 days', '30d': 'Last 30 days', '90d': 'Last 90 days' };
+type Range = '7d' | '30d' | '90d' | 'mtd';
+const RANGES: Record<Range, string> = { '7d': 'Last 7 days', '30d': 'Last 30 days', '90d': 'Last 90 days', mtd: 'Month to date' };
 
 function Kpi({ label, value, current, previous, testId }: { label: string; value: string; current: number; previous: number; testId: string }) {
   const change = percentChange(current, previous);
