@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { api, unwrap } from '../../api/client';
@@ -7,9 +8,23 @@ import { ProductCarousel } from '../../components/ProductCarousel';
 import { useApi } from '../../hooks/useApi';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
+function untilMidnight(now: number) {
+  const end = new Date(now);
+  end.setHours(24, 0, 0, 0);
+  const s = Math.max(0, Math.floor((end.getTime() - now) / 1000));
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+}
+
 export function HomePage() {
   useDocumentTitle(undefined);
   const { data, error, loading, reload } = useApi(() => unwrap(api.GET('/home')));
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <>
@@ -41,6 +56,12 @@ export function HomePage() {
             ))}
           </Row>
 
+          <div className="deals-header d-flex align-items-center mb-2">
+            <span className="badge bg-danger me-2">
+              <Icon name="clock" className="me-1" />
+              Deals end in {untilMidnight(now)}
+            </span>
+          </div>
           <ProductCarousel title="Today's deals" icon="tag" products={data.deals} moreLink="/search?sort=price_asc" />
           <ProductCarousel title="Trending now" icon="fire" products={data.trending} moreLink="/search?sort=popular" />
           <ProductCarousel title="New arrivals" icon="box" products={data.newArrivals} moreLink="/search?sort=newest" />

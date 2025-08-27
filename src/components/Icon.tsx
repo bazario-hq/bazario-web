@@ -34,6 +34,7 @@ const ICONS = {
   chevronRight: 'FaChevronRight',
   tag: 'FaTag',
   fire: 'FaFire',
+  clock: 'FaClock',
   image: 'FaImage',
   upload: 'FaUpload',
   download: 'FaDownload',
