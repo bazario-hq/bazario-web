@@ -27,4 +27,15 @@ describe('buildSalesReport', () => {
       { productId: '2', name: 'Pot, clay', units: 2, revenueCents: 3700 },
     ]);
   });
+
+  it('groups by country', () => {
+    expect(report.byCountry.map((c) => [c.country, c.orders, c.revenueCents])).toEqual([
+      ['SG', 1, 8400],
+      ['LK', 1, 7900],
+    ]);
+  });
+
+  it('builds a day series in date order', () => {
+    expect(report.byDay.map((d) => d.revenueCents)).toEqual([7900, 8400]);
+  });
 });
