@@ -1,3 +1,4 @@
+// TODO(BZR-287): move the refresh token to an httpOnly cookie once the API supports it.
 const KEY = 'bz.auth';
 
 export interface StoredTokens {
