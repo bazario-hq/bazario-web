@@ -6,6 +6,7 @@ import type { ProductCard, ProductSearchResponse, SortOption } from '../../api/t
 import { EmptyState, ErrorAlert, Loading } from '../../components/Feedback';
 import { ProductGrid } from '../../components/ProductGrid';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { formatMoney } from '../../lib/format';
 import { track } from '../../lib/analytics';
 import { SORT_LABELS } from './sort';
@@ -81,6 +82,8 @@ export function SearchPage() {
         loadingMore.current = false;
       });
   };
+
+  useInfiniteScroll(loadMore, hasMore && !loading);
 
   function update(next: Record<string, string | undefined>) {
     const p = new URLSearchParams(params);
