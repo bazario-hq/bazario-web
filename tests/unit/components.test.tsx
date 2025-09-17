@@ -6,6 +6,7 @@ import { Pager } from '../../src/components/Pager';
 import { Price } from '../../src/components/Price';
 import { ProductCard } from '../../src/components/ProductCard';
 import { Rating, Stars } from '../../src/components/Rating';
+import { ShippingBanner } from '../../src/components/ShippingBanner';
 import { StatusBadge } from '../../src/components/StatusBadge';
 import { fakeApp, renderWithApp } from './render';
 
@@ -86,6 +87,15 @@ describe('ProductCard', () => {
   it('shows a disabled button when out of stock', () => {
     renderWithApp(<ProductCard product={{ ...product, stock: 0 }} />);
     expect(screen.getByRole('button', { name: 'Out of stock' })).toBeDisabled();
+  });
+});
+
+describe('ShippingBanner', () => {
+  const cart = (subtotalCents: number, itemCount = 1) => ({ items: [], subtotalCents, shippingCents: 599, totalCents: subtotalCents + 599, currency: 'USD', itemCount });
+
+  it('shows how much is missing for free shipping', () => {
+    renderWithApp(<ShippingBanner />, { app: fakeApp({ cart: cart(3000) }) });
+    expect(screen.getByTestId('shipping-banner')).toHaveTextContent("You're $20.00 away from free shipping.");
   });
 });
 

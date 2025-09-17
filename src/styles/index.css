@@ -50,6 +50,11 @@ h2,
   color: var(--bz-amber);
 }
 
+.shipping-banner {
+  background: #fff4dc;
+  border-bottom: 1px solid #f5d999;
+}
+
 .site-footer {
   background: #f4f6f9;
   border-top: 1px solid #e3e7ed;
