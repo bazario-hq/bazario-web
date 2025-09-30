@@ -59,4 +59,19 @@ test.describe('cart and checkout', () => {
     await expect(page.getByTestId('order-card')).toHaveCount(1);
     await expect(page.getByTestId('order-card')).toContainText(fx.products.spoons.name);
   });
+
+  test('a declined card keeps the cart', async ({ page, request }) => {
+    const { session } = await newBuyer(request);
+    await addToCartViaApi(request, session.accessToken, await productId(request, fx.products.spoons.name), 1);
+    await applySession(page, session);
+    await page.goto('/checkout');
+    await fillAddress(page);
+    await page.getByLabel('Card number').fill('4000 0000 0000 0002');
+    await page.getByLabel('Expiry (MM/YY)').fill('12/31');
+    await page.getByLabel('CVC').fill('123');
+    await page.getByRole('button', { name: /^Pay / }).click();
+    await expect(page.getByTestId('checkout-error')).toContainText('declined');
+    await page.goto('/cart');
+    await expect(page.getByTestId('cart-line')).toHaveCount(1);
+  });
 });
