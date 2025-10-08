@@ -11,6 +11,8 @@ export default defineConfig({
     port: 4173,
   },
   build: {
+    // BZR-311: support needs readable stack traces from customer bug reports.
+    sourcemap: 'inline',
     chunkSizeWarningLimit: 4000,
   },
   test: {
