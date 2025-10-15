@@ -74,4 +74,13 @@ test.describe('cart and checkout', () => {
     await page.goto('/cart');
     await expect(page.getByTestId('cart-line')).toHaveCount(1);
   });
+
+  test('checkout refuses more than the available stock', async ({ page, request }) => {
+    const { session } = await newBuyer(request);
+    await addToCartViaApi(request, session.accessToken, await productId(request, fx.products.pot.name), 2);
+    await applySession(page, session);
+    await page.goto('/cart');
+    const line = page.getByTestId('cart-line');
+    await expect(line.getByRole('button', { name: 'Increase quantity' })).toBeDisabled();
+  });
 });
