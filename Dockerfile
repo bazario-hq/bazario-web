@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:20-bookworm AS deps
+FROM node:22-bookworm AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
