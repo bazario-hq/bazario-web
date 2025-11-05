@@ -83,4 +83,22 @@ test.describe('cart and checkout', () => {
     const line = page.getByTestId('cart-line');
     await expect(line.getByRole('button', { name: 'Increase quantity' })).toBeDisabled();
   });
+
+  test('buyer can cancel an order that has not shipped', async ({ page, request }) => {
+    const { session } = await newBuyer(request);
+    await addToCartViaApi(request, session.accessToken, await productId(request, fx.products.spoons.name), 1);
+    await applySession(page, session);
+    await page.goto('/checkout');
+    await fillAddress(page);
+    await page.getByLabel('Card number').fill('4242424242424242');
+    await page.getByLabel('Expiry (MM/YY)').fill('01/30');
+    await page.getByLabel('CVC').fill('321');
+    await page.getByRole('button', { name: /^Pay / }).click();
+    await expect(page.getByTestId('order-placed')).toBeVisible();
+
+    page.once('dialog', (d) => d.accept());
+    await page.getByRole('button', { name: 'Cancel order' }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Cancelled');
+    await expect(page.getByRole('button', { name: 'Cancel order' })).toHaveCount(0);
+  });
 });
