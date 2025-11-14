@@ -28,7 +28,7 @@ e2e/              Playwright specs, fixtures and the local test stack
 
 ## Running locally
 
-The whole platform (API, Postgres, MinIO, monitoring) runs from [`bazario-infra`](https://github.com/bazario-hq/bazario-infra):
+The whole platform (API, Postgres, SeaweedFS object storage, monitoring) runs from [`bazario-infra`](https://github.com/bazario-hq/bazario-infra):
 
 ```sh
 cd ../bazario-infra
