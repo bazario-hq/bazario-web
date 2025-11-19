@@ -48,6 +48,13 @@ test.describe('browsing', () => {
     await expect(page.getByRole('cell', { name: '130 x 170 cm' })).toBeVisible();
   });
 
+  test('storefront lists the seller and their products', async ({ page }) => {
+    await page.goto(`/s/${fx.seller.slug}`);
+    await expect(page.getByRole('heading', { name: fx.seller.store })).toBeVisible();
+    await expect(page.getByText(`${fx.loomsProductCount} products`)).toBeVisible();
+    await expect(page.locator('[data-product-card]')).toHaveCount(24);
+  });
+
   test('out of stock products cannot be added to the cart', async ({ page }) => {
     await page.goto('/search?q=' + encodeURIComponent(fx.products.kettle.name));
     const card = page.locator('[data-product-card]').filter({ hasText: fx.products.kettle.name });
