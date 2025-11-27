@@ -142,7 +142,7 @@ export function SearchPage() {
               max={PRICE_MAX_CENTS}
               step={500}
               value={filters.minPrice ?? 0}
-              onChange={(e) => update({ minPrice: e.target.value })}
+              onChange={(e) => update({ minPrice: e.target.value === '0' ? undefined : e.target.value })}
             />
             <Form.Label className="small mb-0" htmlFor="max-price">
               Max: {filters.maxPrice != null ? formatMoney(filters.maxPrice) : 'Any'}
