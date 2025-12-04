@@ -60,6 +60,22 @@ describe('StatusBadge', () => {
   });
 });
 
+describe('Pager', () => {
+  it('renders a window of pages and reports clicks', () => {
+    const onChange = vi.fn();
+    render(<Pager page={5} totalPages={20} onChange={onChange} />);
+    for (const p of ['1', '3', '4', '5', '6', '7', '20']) expect(screen.getByText(p)).toBeInTheDocument();
+    expect(screen.queryByText('2')).toBeNull();
+    fireEvent.click(screen.getByText('6'));
+    expect(onChange).toHaveBeenCalledWith(6);
+  });
+
+  it('renders nothing for a single page', () => {
+    const { container } = render(<Pager page={1} totalPages={1} onChange={() => {}} />);
+    expect(container).toBeEmptyDOMElement();
+  });
+});
+
 describe('ProductCard', () => {
   const categories = [{ id: 1, name: 'Home', slug: 'home', children: [{ id: 3, name: 'Textiles', slug: 'textiles', children: [] }] }];
 
