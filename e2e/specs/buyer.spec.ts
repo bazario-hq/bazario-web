@@ -35,4 +35,17 @@ test.describe('buyer account', () => {
     await form.getByRole('button', { name: 'Submit review' }).click();
     await expect(form.getByRole('alert')).toContainText('already reviewed');
   });
+
+  test('buyers cannot review products they have not bought', async ({ page, request }) => {
+    const { session } = await newBuyer(request);
+    await applySession(page, session);
+    await page.goto('/search?q=' + encodeURIComponent(fx.products.throw.name));
+    await page.locator('[data-product-card]').filter({ hasText: fx.products.throw.name }).getByRole('heading').getByRole('link').click();
+    await page.getByRole('button', { name: 'Write a review' }).click();
+    const form = page.getByRole('form', { name: 'Write a review' });
+    await form.getByLabel('Title').fill('Looks nice');
+    await form.getByLabel('Review').fill('Have not bought it yet');
+    await form.getByRole('button', { name: 'Submit review' }).click();
+    await expect(form.getByRole('alert')).toContainText('purchased');
+  });
 });
