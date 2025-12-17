@@ -14,6 +14,20 @@ test.describe('buyer account', () => {
     await expect(page.getByRole('button', { name: 'Cancel order' })).toHaveCount(0);
   });
 
+  test('wishlist: save, view and remove', async ({ page, request }) => {
+    const { session } = await newBuyer(request);
+    await applySession(page, session);
+    await page.goto('/search?q=' + encodeURIComponent(fx.products.pot.name));
+    const card = page.locator('[data-product-card]').filter({ hasText: fx.products.pot.name });
+    await card.getByRole('button', { name: 'Save to wishlist' }).click();
+    await expect(card.getByRole('button', { name: 'Remove from wishlist' })).toBeVisible();
+
+    await page.getByRole('link', { name: 'Wishlist' }).click();
+    await expect(page.locator('[data-product-card]')).toHaveCount(1);
+    await page.locator('[data-product-card]').getByRole('button', { name: 'Remove from wishlist' }).click();
+    await expect(page.getByText('Your wishlist is empty')).toBeVisible();
+  });
+
   test('a buyer reviews a product they bought', async ({ page, request }) => {
     await signIn(page, request, fx.buyer.email);
     await page.goto('/search?q=' + encodeURIComponent(fx.products.throw.name));
