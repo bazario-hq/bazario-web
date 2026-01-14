@@ -29,4 +29,10 @@ test.describe('admin', () => {
     await expect(page.getByTestId('total-gmv')).toContainText('$');
     await expect(page.getByTestId('total-sellers')).not.toHaveText('0');
   });
+
+  test('non-admins cannot open the admin area', async ({ page, request }) => {
+    await signIn(page, request, fx.buyer.email);
+    await page.goto('/admin');
+    await expect(page.getByText("You don't have access to this page.")).toBeVisible();
+  });
 });
