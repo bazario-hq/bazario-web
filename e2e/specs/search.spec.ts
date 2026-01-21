@@ -38,4 +38,17 @@ test.describe('search', () => {
     await expect(page.getByTestId('result-count')).toHaveText('1 result');
     await expect(page.locator('[data-product-card]')).toHaveCount(1);
   });
+
+  test('all products loads more results on scroll', async ({ page }) => {
+    await page.goto('/search');
+    const total = Number((await page.getByTestId('result-count').textContent())!.replace(/\D/g, ''));
+    expect(total).toBeGreaterThan(48);
+    await expect(page.locator('[data-product-card]')).toHaveCount(24);
+    await page.mouse.wheel(0, 20000);
+    await expect.poll(() => page.locator('[data-product-card]').count()).toBeGreaterThanOrEqual(48);
+    const loadMore = page.getByRole('button', { name: 'Load more' });
+    if (await loadMore.isVisible()) await loadMore.click();
+    await expect(page.locator('[data-product-card]')).toHaveCount(total);
+    await expect(page.getByRole('button', { name: 'Load more' })).toHaveCount(0);
+  });
 });
