@@ -28,6 +28,19 @@ test.describe('buyer account', () => {
     await expect(page.getByText('Your wishlist is empty')).toBeVisible();
   });
 
+  test('notifications: unread badge and mark all as read', async ({ page, request }) => {
+    await signIn(page, request, fx.buyer.email);
+    await page.goto('/');
+    await expect(page.getByTestId('unread-count')).toHaveText('2');
+    await page.getByRole('link', { name: 'Notifications' }).click();
+    await expect(page.getByTestId('notification')).toHaveCount(3);
+    await page.getByLabel('Unread only').check();
+    await expect(page.getByTestId('notification')).toHaveCount(2);
+    await page.getByRole('button', { name: 'Mark all as read' }).click();
+    await expect(page.getByTestId('unread-count')).toHaveCount(0);
+    await expect(page.locator('[data-testid="notification"][data-read="false"]')).toHaveCount(0);
+  });
+
   test('a buyer reviews a product they bought', async ({ page, request }) => {
     await signIn(page, request, fx.buyer.email);
     await page.goto('/search?q=' + encodeURIComponent(fx.products.throw.name));
