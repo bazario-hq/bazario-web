@@ -51,4 +51,10 @@ test.describe('search', () => {
     await expect(page.locator('[data-product-card]')).toHaveCount(total);
     await expect(page.getByRole('button', { name: 'Load more' })).toHaveCount(0);
   });
+
+  test('sorting by price', async ({ page }) => {
+    await page.goto('/search?category=' + fx.categories.kitchen);
+    await page.getByLabel('Sort by').selectOption('price_asc');
+    await expect(page.locator('[data-product-card]').first()).toContainText('Coconut Shell Bowl No. 1');
+  });
 });
