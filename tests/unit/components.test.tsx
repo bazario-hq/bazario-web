@@ -104,6 +104,11 @@ describe('ProductCard', () => {
     renderWithApp(<ProductCard product={{ ...product, stock: 0 }} />);
     expect(screen.getByRole('button', { name: 'Out of stock' })).toBeDisabled();
   });
+
+  it('marks wishlisted products', () => {
+    renderWithApp(<ProductCard product={product} />, { app: fakeApp({ wishlistIds: [7] }) });
+    expect(screen.getByRole('button', { name: 'Remove from wishlist' })).toHaveAttribute('aria-pressed', 'true');
+  });
 });
 
 describe('ShippingBanner', () => {
