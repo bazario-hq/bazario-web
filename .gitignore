@@ -7,3 +7,4 @@ test-results
 blob-report
 e2e/.state
 *.tsbuildinfo
+.lighthouseci

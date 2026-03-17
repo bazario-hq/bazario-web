@@ -1,0 +1,79 @@
+# Report-only: bundle size and Lighthouse. Neither blocks a merge.
+name: reports
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: reports-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  bundle-size:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          VITE_API_URL: http://localhost:3000
+      - name: Bundle size report
+        run: node scripts/bundle-report.mjs >> "$GITHUB_STEP_SUMMARY"
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: bazario-web
+      - uses: actions/checkout@v4
+        with:
+          repository: bazario-hq/bazario-api
+          ref: main
+          path: bazario-api
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: bazario-web/.nvmrc
+          cache: npm
+          cache-dependency-path: |
+            bazario-web/package-lock.json
+            bazario-api/package-lock.json
+      - run: npm ci
+        working-directory: bazario-api
+      - run: npm ci
+        working-directory: bazario-web
+      - name: Start Postgres, API and a production build of the web app
+        working-directory: bazario-web
+        env:
+          API_DIR: ../bazario-api
+          VITE_API_URL: http://localhost:3999
+        run: |
+          npm run e2e:db
+          node e2e/stack/start-api.mjs > ../stack.log 2>&1 &
+          for i in $(seq 1 90); do curl -fs localhost:3998 >/dev/null && break; sleep 2; done
+          curl -fs localhost:3998 >/dev/null || { cat ../stack.log; exit 1; }
+          npx vite build
+          npx vite preview --port 4173 --strictPort > ../preview.log 2>&1 &
+          for i in $(seq 1 30); do curl -fs localhost:4173 >/dev/null && break; sleep 1; done
+      - name: Lighthouse
+        working-directory: bazario-web
+        run: npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse
+          path: bazario-web/.lighthouseci
+          retention-days: 7
