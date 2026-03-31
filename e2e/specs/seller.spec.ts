@@ -51,6 +51,17 @@ test.describe('seller area', () => {
     await expect(card).toContainText('$24.50');
   });
 
+  test('edit a price and see it on the product page', async ({ page }) => {
+    await page.goto('/seller/products?q=' + encodeURIComponent('Woven Table Runner No. 02'));
+    await page.getByRole('link', { name: 'Woven Table Runner No. 02' }).click();
+    await page.getByLabel('Price (USD)').fill('19.95');
+    await page.getByRole('button', { name: 'Save changes' }).click();
+    await expect(page.getByText('Product saved')).toBeVisible();
+    const id = page.url().split('/').pop();
+    await page.goto(`/p/${id}`);
+    await expect(page.getByTestId('product-price')).toHaveText('$19.95');
+  });
+
   test('bulk update stock and see the history', async ({ page }) => {
     await page.goto('/seller/inventory');
     await page.getByLabel('Stock for Handloom Cushion Cover No. 01').fill('3');
