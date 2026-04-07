@@ -78,4 +78,17 @@ test.describe('seller area', () => {
     await expect(dialog.getByRole('cell', { name: 'stock take' })).toBeVisible();
     await expect(dialog.getByRole('cell', { name: '-22' })).toBeVisible();
   });
+
+  test('payouts and store profile', async ({ page }) => {
+    await page.goto('/seller/payouts');
+    await expect(page.getByTestId('payout-row').first()).toBeVisible();
+    await expect(page.getByTestId('payout-net-total')).toContainText('$');
+
+    await page.goto('/seller/profile');
+    await page.getByLabel('Description').fill('Handloom textiles from Kurunegala.');
+    await page.getByRole('button', { name: 'Save' }).click();
+    await expect(page.getByText('Store profile saved')).toBeVisible();
+    await page.goto(`/s/${fx.seller.slug}`);
+    await expect(page.getByText('Handloom textiles from Kurunegala.')).toBeVisible();
+  });
 });
