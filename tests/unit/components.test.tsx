@@ -118,6 +118,14 @@ describe('ShippingBanner', () => {
     renderWithApp(<ShippingBanner />, { app: fakeApp({ cart: cart(3000) }) });
     expect(screen.getByTestId('shipping-banner')).toHaveTextContent("You're $20.00 away from free shipping.");
   });
+
+  it('hides at or above the threshold and for empty carts', () => {
+    const { unmount } = renderWithApp(<ShippingBanner />, { app: fakeApp({ cart: cart(5000) }) });
+    expect(screen.queryByTestId('shipping-banner')).toBeNull();
+    unmount();
+    renderWithApp(<ShippingBanner />, { app: fakeApp({ cart: cart(0, 0) }) });
+    expect(screen.queryByTestId('shipping-banner')).toBeNull();
+  });
 });
 
 describe('MemoryRouter sanity', () => {
