@@ -91,4 +91,13 @@ test.describe('seller area', () => {
     await page.goto(`/s/${fx.seller.slug}`);
     await expect(page.getByText('Handloom textiles from Kurunegala.')).toBeVisible();
   });
+
+  test('buyers are sent to the seller application', async ({ page, request }) => {
+    const { session } = await newBuyer(request);
+    await applySession(page, session);
+    await page.goto('/seller');
+    await expect(page).toHaveURL(/\/sell$/);
+    await expect(page.getByRole('heading', { name: 'Open your store' })).toBeVisible();
+    expect(API_URL).toContain('localhost');
+  });
 });
