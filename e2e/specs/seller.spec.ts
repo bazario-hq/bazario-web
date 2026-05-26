@@ -79,6 +79,23 @@ test.describe('seller area', () => {
     await expect(dialog.getByRole('cell', { name: '-22' })).toBeVisible();
   });
 
+  test('ship an order and the buyer sees it shipped', async ({ page, request, browser }) => {
+    await page.goto('/seller/orders?status=pending');
+    await page.getByTestId('seller-order-row').first().getByRole('link').click();
+    const orderId = page.url().split('/').pop();
+    await page.getByLabel('Tracking number').fill('LK-E2E-0042');
+    await page.getByRole('button', { name: /^Ship/ }).click();
+    await expect(page.getByText('Tracking LK-E2E-0042')).toBeVisible();
+    await page.getByRole('button', { name: 'Mark shipped items delivered' }).click();
+    await expect(page.locator('[data-status="delivered"]').first()).toBeVisible();
+
+    const reviewer = await apiLogin(request, 'reviewer1@bazario.example');
+    const buyerPage = await (await browser.newContext()).newPage();
+    await applySession(buyerPage, reviewer);
+    await buyerPage.goto(`/orders/${orderId}`);
+    await expect(buyerPage.getByText('Tracking LK-E2E-0042')).toBeVisible();
+  });
+
   test('payouts and store profile', async ({ page }) => {
     await page.goto('/seller/payouts');
     await expect(page.getByTestId('payout-row').first()).toBeVisible();
