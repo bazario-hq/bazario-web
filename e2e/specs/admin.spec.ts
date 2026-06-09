@@ -22,6 +22,19 @@ test.describe('admin', () => {
     await expect(applicantPage.getByText(fx.applicant.store).first()).toBeVisible();
   });
 
+  test('moderate a held review', async ({ page, request }) => {
+    await signIn(page, request, fx.admin.email);
+    await page.goto('/admin/reviews');
+    const review = page.getByTestId('moderation-review').filter({ hasText: 'Smaller than expected' });
+    await review.getByLabel('Moderation note').fill('Fair feedback');
+    await review.getByRole('button', { name: 'Publish' }).click();
+    await expect(page.getByText('Review published')).toBeVisible();
+    await expect(page.getByTestId('moderation-review').filter({ hasText: 'Smaller than expected' })).toHaveCount(0);
+
+    await page.getByLabel('Status').selectOption('published');
+    await expect(page.getByTestId('moderation-review').filter({ hasText: 'Smaller than expected' })).toBeVisible();
+  });
+
   test('platform overview shows totals', async ({ page, request }) => {
     await signIn(page, request, fx.admin.email);
     await page.goto('/admin');
