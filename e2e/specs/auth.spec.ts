@@ -69,4 +69,14 @@ test.describe('accounts', () => {
     await expect(page.getByRole('link', { name: 'Log in' })).toBeVisible();
     expect(await page.evaluate(() => localStorage.getItem('bz.auth'))).toBeNull();
   });
+
+  test('account page updates the name', async ({ page, request }) => {
+    const email = `rename-${Date.now()}@bazario.example`;
+    await request.post('http://localhost:3999/api/auth/signup', { data: { email, password: fx.password, name: 'Old Name' } });
+    await applySession(page, await apiLogin(request, email));
+    await page.goto('/account');
+    await page.getByLabel('Name').fill('Kamala Silva');
+    await page.getByRole('button', { name: 'Save' }).click();
+    await expect(page.getByRole('button', { name: 'Kamala' })).toBeVisible();
+  });
 });
