@@ -24,3 +24,16 @@ describe('LoginPage', () => {
     await waitFor(() => expect(app.login).toHaveBeenCalledWith('ben@example.test', 'secret-pass'));
   });
 });
+
+describe('SignupPage', () => {
+  it('validates the password length before calling the API', async () => {
+    const app = fakeApp();
+    renderWithApp(<SignupPage />, { app, path: '/signup-form' });
+    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Nimal' } });
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'n@example.test' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'short' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Create account' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('at least 8 characters');
+    expect(app.signup).not.toHaveBeenCalled();
+  });
+});
