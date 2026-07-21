@@ -35,6 +35,24 @@ test.describe('admin', () => {
     await expect(page.getByTestId('moderation-review').filter({ hasText: 'Smaller than expected' })).toBeVisible();
   });
 
+  test('suspend a user who then cannot log in', async ({ page, request }) => {
+    const { email } = await newBuyer(request, 'Spammy Sam');
+    await signIn(page, request, fx.admin.email);
+    await page.goto('/admin/users');
+    await page.getByLabel('Search users').fill(email);
+    await page.getByRole('main').getByRole('button', { name: 'Search' }).click();
+    const row = page.getByTestId('admin-user-row');
+    await expect(row).toHaveCount(1);
+    await row.getByRole('button', { name: 'Suspend' }).click();
+    await expect(row.locator('[data-status="suspended"]')).toBeVisible();
+
+    const res = await request.post(`${API_URL}/api/auth/login`, { data: { email, password: fx.password } });
+    expect(res.ok()).toBeFalsy();
+
+    await page.goto('/admin/audit-log');
+    await expect(page.getByTestId('audit-row').first()).toBeVisible();
+  });
+
   test('platform overview shows totals', async ({ page, request }) => {
     await signIn(page, request, fx.admin.email);
     await page.goto('/admin');
