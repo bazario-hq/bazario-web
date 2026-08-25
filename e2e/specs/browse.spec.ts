@@ -27,6 +27,13 @@ test.describe('browsing', () => {
     expect(cents).toEqual([...cents].sort((a, b) => b - a));
   });
 
+  test('subcategory links and breadcrumbs', async ({ page }) => {
+    await page.goto(`/c/${fx.categories.home}`);
+    await page.getByRole('link', { name: 'Textiles', exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/c/${fx.categories.textiles}`));
+    await expect(page.getByRole('navigation', { name: 'breadcrumb' }).getByRole('link', { name: 'Home & Living' })).toBeVisible();
+  });
+
   test('empty category shows an empty state', async ({ page }) => {
     await page.goto(`/c/${fx.categories.toys}`);
     await expect(page.getByText('No products in this category yet')).toBeVisible();
