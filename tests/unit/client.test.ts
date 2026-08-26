@@ -28,6 +28,25 @@ describe('api client auth', () => {
     expect(req.headers.get('Authorization')).toBe('Bearer access-1');
   });
 
+  it('refreshes once for concurrent 401s and retries each request', async () => {
+    setTokens({ accessToken: 'stale', refreshToken: 'refresh-1' });
+    fetchMock.mockImplementation(async (input: Request | string) => {
+      const url = typeof input === 'string' ? input : input.url;
+      if (url.endsWith('/auth/refresh')) {
+        await new Promise((r) => setTimeout(r, 10));
+        return json(200, { accessToken: 'fresh', refreshToken: 'refresh-2', expiresIn: '15m', user: me });
+      }
+      const auth = (input as Request).headers.get('Authorization');
+      return auth === 'Bearer fresh' ? json(200, me) : json(401, { error: { code: 'unauthorized', message: 'expired' } });
+    });
+
+    const results = await Promise.all([unwrap(api.GET('/auth/me')), unwrap(api.GET('/auth/me')), unwrap(api.GET('/auth/me'))]);
+    expect(results.map((r) => r.name)).toEqual(['Ben', 'Ben', 'Ben']);
+    const refreshCalls = fetchMock.mock.calls.filter(([i]) => (typeof i === 'string' ? i : i.url).endsWith('/auth/refresh'));
+    expect(refreshCalls).toHaveLength(1);
+    expect(getTokens()).toEqual({ accessToken: 'fresh', refreshToken: 'refresh-2' });
+  });
+
   it('clears the session when the refresh token is rejected', async () => {
     setTokens({ accessToken: 'stale', refreshToken: 'revoked' });
     const lost = vi.fn();
