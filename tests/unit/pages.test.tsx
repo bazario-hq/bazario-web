@@ -23,6 +23,15 @@ describe('LoginPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Log in' }));
     await waitFor(() => expect(app.login).toHaveBeenCalledWith('ben@example.test', 'secret-pass'));
   });
+
+  it('shows the API error', async () => {
+    const app = fakeApp({ login: vi.fn(async () => Promise.reject(new ApiError(401, 'invalid_credentials', 'Email or password is incorrect'))) });
+    renderWithApp(<LoginPage />, { app, path: '/login-form' });
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'ben@example.test' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'nope' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Log in' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Email or password is incorrect');
+  });
 });
 
 describe('SignupPage', () => {
