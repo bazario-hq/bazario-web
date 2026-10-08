@@ -1,5 +1,5 @@
 /**
- * Generated from openapi/openapi.json (bazario-hq/bazario-api@f3ea4ded0b2b7897c5299c5cf8b8657ceb13b61e).
+ * Generated from openapi/openapi.json (bazario-hq/bazario-api@f71b39f973027dea97b10d37292a9a0483ab6df7).
  * Do not edit by hand: run `npm run api:generate`.
  */
 
